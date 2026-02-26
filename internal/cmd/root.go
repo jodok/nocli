@@ -26,6 +26,7 @@ type CLI struct {
 	Page       PageCmd       `cmd:"" help:"Page operations"`
 	Block      BlockCmd      `cmd:"" help:"Block operations"`
 	Collection CollectionCmd `cmd:"" help:"Collection operations"`
+	Auth       AuthCmd       `cmd:"" help:"Authentication helpers"`
 }
 
 func Execute(args []string) error {
@@ -67,6 +68,7 @@ func Execute(args []string) error {
 	}
 
 	runCtx := context.WithValue(context.Background(), clientContextKey{}, client)
+	runCtx = context.WithValue(runCtx, configPathContextKey{}, config.ResolvePath(cli.ConfigPath))
 	ctx.BindTo(runCtx, (*context.Context)(nil))
 
 	if err := ctx.Run(); err != nil {
@@ -79,6 +81,7 @@ func Execute(args []string) error {
 }
 
 type clientContextKey struct{}
+type configPathContextKey struct{}
 
 func ClientFromContext(ctx context.Context) *notionclient.Client {
 	v := ctx.Value(clientContextKey{})
@@ -93,4 +96,16 @@ func firstNonEmpty(values ...string) string {
 		}
 	}
 	return ""
+}
+
+func ConfigPathFromContext(ctx context.Context) string {
+	if ctx == nil {
+		return config.ResolvePath("")
+	}
+	if v := ctx.Value(configPathContextKey{}); v != nil {
+		if s, ok := v.(string); ok && strings.TrimSpace(s) != "" {
+			return s
+		}
+	}
+	return config.ResolvePath("")
 }

@@ -5,6 +5,7 @@ CLI prototype for calling Notion's browser/private endpoints (not the public Not
 ## Commands
 
 - `notion page fetch <url-or-page-id>`: Calls Notion private page endpoints and prints JSON.
+- `notion auth import-curl`: Import credentials from a pasted Notion DevTools "Copy as cURL" request.
 - `notion page objects <url-or-page-id>`: Exposes flattened `recordMap` objects across all tables.
 - `notion page types <url-or-page-id>`: Shows block types seen in the page vs documented public API block types.
 - `notion block get <block-id>`: Fetches a single block.
@@ -37,6 +38,18 @@ NOTION_ACTIVE_USER_ID='...' \
 go run ./cmd/notion page fetch \
   'https://www.notion.so/pinateam/Private-Jodok-246bbe48fc7e804e92c6d77450bb136f'
 ```
+
+### Easiest auth import flow
+
+1. In browser DevTools on a Notion page, open Network and select a Notion API request.
+2. Right-click request -> Copy -> Copy as cURL.
+3. Paste into:
+
+```bash
+pbpaste | go run ./cmd/notion auth import-curl
+```
+
+This stores extracted values into `.notion.json` (`token_v2`, `notion_user_id`, and optionally `active_user_id`).
 
 You can force the second endpoint with:
 

@@ -14,6 +14,7 @@
   - `loadPageChunk` (primary)
   - `loadCachedPageChunkV2` (fallback)
 - Object exposure commands:
+  - `auth import-curl` (extract creds from pasted DevTools cURL)
   - `page objects` (flattened `recordMap`, optional Notion-like block objects)
   - `page types` (seen block types vs public API list)
   - `block get`, `block children`
