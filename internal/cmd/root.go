@@ -32,12 +32,19 @@ type CLI struct {
 func Execute(args []string) error {
 	cli := &CLI{}
 	parser, err := kong.New(cli,
-		kong.Name("notion"),
+		kong.Name("nocli"),
 		kong.Description("CLI for Notion browser/private endpoints"),
 		kong.UsageOnError(),
 	)
 	if err != nil {
 		return fmt.Errorf("create parser: %w", err)
+	}
+	if len(args) == 0 {
+		printTopLevelHelp()
+		if !hasAnyAuthMaterial() {
+			printAuthBootstrapHint()
+		}
+		return nil
 	}
 
 	ctx, err := parser.Parse(args)
@@ -108,4 +115,48 @@ func ConfigPathFromContext(ctx context.Context) string {
 		}
 	}
 	return config.ResolvePath("")
+}
+
+func hasAnyAuthMaterial() bool {
+	envToken := strings.TrimSpace(os.Getenv("NOTION_TOKEN_V2"))
+	envUser := strings.TrimSpace(os.Getenv("NOTION_USER_ID"))
+	envCookie := strings.TrimSpace(os.Getenv("NOTION_COOKIE"))
+	if envCookie != "" || (envToken != "" && envUser != "") {
+		return true
+	}
+
+	cfgPath := config.ResolvePath(os.Getenv("NOTION_CONFIG"))
+	cfg, err := config.Read(cfgPath)
+	if err != nil {
+		return false
+	}
+	if strings.TrimSpace(cfg.Cookie) != "" {
+		return true
+	}
+	return strings.TrimSpace(cfg.TokenV2) != "" && strings.TrimSpace(cfg.NotionUserID) != ""
+}
+
+func printAuthBootstrapHint() {
+	_, _ = fmt.Fprintln(os.Stdout, "")
+	_, _ = fmt.Fprintln(os.Stdout, "No auth config found.")
+	_, _ = fmt.Fprintln(os.Stdout, "Quick setup:")
+	_, _ = fmt.Fprintln(os.Stdout, "  1) Open Notion in browser and sign in.")
+	_, _ = fmt.Fprintln(os.Stdout, "  2) DevTools -> Network -> pick a /api/v3/... request.")
+	_, _ = fmt.Fprintln(os.Stdout, "  3) Right click -> Copy -> Copy as cURL.")
+	_, _ = fmt.Fprintln(os.Stdout, "  4) Run: pbpaste | nocli auth import-curl")
+}
+
+func printTopLevelHelp() {
+	_, _ = fmt.Fprintln(os.Stdout, "Usage: nocli <command> [flags]")
+	_, _ = fmt.Fprintln(os.Stdout, "")
+	_, _ = fmt.Fprintln(os.Stdout, "CLI for Notion browser/private endpoints")
+	_, _ = fmt.Fprintln(os.Stdout, "")
+	_, _ = fmt.Fprintln(os.Stdout, "Common commands:")
+	_, _ = fmt.Fprintln(os.Stdout, "  nocli page fetch <url-or-id>")
+	_, _ = fmt.Fprintln(os.Stdout, "  nocli page objects <url-or-id>")
+	_, _ = fmt.Fprintln(os.Stdout, "  nocli block get <block-id>")
+	_, _ = fmt.Fprintln(os.Stdout, "  nocli collection query <collection-id> <view-id>")
+	_, _ = fmt.Fprintln(os.Stdout, "  nocli auth import-curl")
+	_, _ = fmt.Fprintln(os.Stdout, "")
+	_, _ = fmt.Fprintln(os.Stdout, "Run 'nocli --help' for full help.")
 }
