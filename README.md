@@ -2,6 +2,13 @@
 
 CLI prototype for calling Notion's browser/private endpoints (not the public Notion API).
 
+## Install
+
+```bash
+brew tap jodok/tap
+brew install nocli
+```
+
 ## Commands
 
 - `notion page fetch <url-or-page-id>`: Calls Notion private page endpoints and prints JSON.
@@ -68,3 +75,14 @@ Query a board/database directly:
 ```bash
 go run ./cmd/notion collection query '<collection-id>' '<view-id>' --flatten
 ```
+
+## Releases
+
+- Tag a version like `v0.1.0` and push it.
+- GitHub Actions runs GoReleaser and publishes:
+  - GitHub release binaries (`darwin/linux`, `amd64/arm64`)
+  - Homebrew formula updates in `jodok/homebrew-tap`
+
+Required repository secret in `jodok/nocli`:
+
+- `HOMEBREW_TAP_GITHUB_TOKEN`: PAT with write access to `jodok/homebrew-tap`

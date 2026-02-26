@@ -19,6 +19,10 @@
   - `page types` (seen block types vs public API list)
   - `block get`, `block children`
   - `collection query`
+- Release automation:
+  - GoReleaser config in `.goreleaser.yaml`
+  - GitHub workflows: `.github/workflows/release.yml` and `.github/workflows/snapshot.yml`
+  - Homebrew formula publishing target: `jodok/homebrew-tap` (requires secret token)
 
 ## Auth + Config
 - Default config file path: `.notion.json` (repo root).

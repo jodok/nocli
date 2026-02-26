@@ -1,0 +1,66 @@
+version: 2
+
+project_name: nocli
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+
+builds:
+  - id: nocli
+    main: ./cmd/notion
+    binary: nocli
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+
+archives:
+  - formats: [tar.gz]
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- .Os }}_
+      {{- .Arch }}
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
+
+release:
+  github:
+    owner: jodok
+    name: nocli
+
+brews:
+  - name: nocli
+    repository:
+      owner: jodok
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    homepage: https://github.com/jodok/nocli
+    description: Notion private API CLI
+    license: MIT
+    install: |
+      bin.install "nocli"
+    test: |
+      system "#{bin}/nocli", "--help"
+    commit_author:
+      name: github-actions[bot]
+      email: 41898282+github-actions[bot]@users.noreply.github.com
+    commit_msg_template: "chore: brew formula update for {{ .ProjectName }} {{ .Tag }}"
+    directory: Formula
