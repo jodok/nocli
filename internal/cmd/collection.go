@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/tashi/notion/internal/notionclient"
+	"github.com/jodok/nocli/internal/notionclient"
 )
 
 type CollectionCmd struct {

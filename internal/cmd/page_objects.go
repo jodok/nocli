@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/tashi/notion/internal/notionclient"
+	"github.com/jodok/nocli/internal/notionclient"
 )
 
 type PageObjectsCmd struct {

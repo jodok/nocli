@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/tashi/notion/internal/cmd"
+	"github.com/jodok/nocli/internal/cmd"
 )
 
 func main() {

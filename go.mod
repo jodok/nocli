@@ -1,4 +1,4 @@
-module github.com/tashi/notion
+module github.com/jodok/nocli
 
 go 1.22.0
 

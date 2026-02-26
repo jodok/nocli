@@ -8,8 +8,8 @@ import (
 
 	"github.com/alecthomas/kong"
 
-	"github.com/tashi/notion/internal/config"
-	"github.com/tashi/notion/internal/notionclient"
+	"github.com/jodok/nocli/internal/config"
+	"github.com/jodok/nocli/internal/notionclient"
 )
 
 type RootFlags struct {
