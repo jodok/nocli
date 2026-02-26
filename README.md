@@ -13,6 +13,7 @@ brew install nocli
 
 - `notion page fetch <url-or-page-id>`: Calls Notion private page endpoints and prints JSON.
 - `notion auth import-curl`: Import credentials from a pasted Notion DevTools "Copy as cURL" request.
+- `notion objects`: Show object-oriented command entry points.
 - `notion page objects <url-or-page-id>`: Exposes flattened `recordMap` objects across all tables.
 - `notion page types <url-or-page-id>`: Shows block types seen in the page vs documented public API block types.
 - `notion block get <block-id>`: Fetches a single block.

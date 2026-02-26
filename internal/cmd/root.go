@@ -27,6 +27,7 @@ type CLI struct {
 	Block      BlockCmd      `cmd:"" help:"Block operations"`
 	Collection CollectionCmd `cmd:"" help:"Collection operations"`
 	Auth       AuthCmd       `cmd:"" help:"Authentication helpers"`
+	Objects    ObjectsCmd    `cmd:"" help:"Object discovery shortcuts"`
 }
 
 func Execute(args []string) error {
@@ -49,6 +50,9 @@ func Execute(args []string) error {
 
 	ctx, err := parser.Parse(args)
 	if err != nil {
+		if msg := strings.TrimSpace(err.Error()); msg != "" {
+			_, _ = fmt.Fprintln(os.Stderr, msg)
+		}
 		return err
 	}
 
