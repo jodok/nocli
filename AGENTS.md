@@ -25,7 +25,8 @@
   - Homebrew formula publishing target: `jodok/homebrew-tap` (requires secret token)
 
 ## Auth + Config
-- Default config file path: `.notion.json` (repo root).
+- Default config file path: `~/.nocli.json`.
+- Legacy fallback path: `~/.notion.json` (read-only fallback when new file is absent).
 - Config loader: `internal/config/config.go`.
 - Supported fields:
   - `base_url`
@@ -33,7 +34,7 @@
   - `notion_user_id`
   - `active_user_id`
   - `cookie`
-- `.notion.json` is gitignored and expected to be `0600`.
+- `~/.nocli.json` is expected to be `0600`.
 
 ## Command to Test
 ```bash
@@ -46,7 +47,7 @@ go run ./cmd/notion page fetch 'https://www.notion.so/pinateam/Private-Jodok-246
 - `loadPageChunk` expects UUID-formatted page IDs (`8-4-4-4-12`), not plain 32-char hex.
 - Verified working fetch on:
   - `https://www.notion.so/pinateam/Private-Jodok-246bbe48fc7e804e92c6d77450bb136f`
-  - using only `token_v2` + `notion_user_id` from `.notion.json` (no extra cookie required for this page).
+  - using only `token_v2` + `notion_user_id` from config file (no extra cookie required for this page).
 - If fetch fails with auth/permission issues, capture browser request headers for:
   - `x-notion-active-user-header`
   - full cookie string (if token-only auth is insufficient)
@@ -56,10 +57,10 @@ go run ./cmd/notion page fetch 'https://www.notion.so/pinateam/Private-Jodok-246
 ## Security Notes
 - Never commit raw session credentials.
 - Do not print credentials in logs or error messages.
-- Treat `.notion.json` as local secret material.
+- Treat config files as local secret material.
 
 ## Next Engineering Steps
-1. Add a `config set` command to update `.notion.json` safely from CLI.
+1. Add a `config set` command to update `~/.nocli.json` safely from CLI.
 2. Add typed conversion for more public-API-like objects (rich_text, files, mentions, emoji).
 3. Add integration-style command tests with mocked HTTP transport.
 4. Add retries/backoff for transient 5xx and rate-limit responses.

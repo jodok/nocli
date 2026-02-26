@@ -56,7 +56,9 @@ go run ./cmd/notion page fetch \
 pbpaste | go run ./cmd/notion auth import-curl
 ```
 
-This stores extracted values into `.notion.json` (`token_v2`, `notion_user_id`, and optionally `active_user_id`).
+This stores extracted values into `~/.nocli.json` (`token_v2`, `notion_user_id`, and optionally `active_user_id`).
+
+Legacy compatibility: if `~/.nocli.json` does not exist, `~/.notion.json` is still read.
 
 You can force the second endpoint with:
 

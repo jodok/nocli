@@ -13,7 +13,7 @@ import (
 )
 
 type RootFlags struct {
-	ConfigPath   string `name:"config" default:".notion.json" help:"Path to config file" env:"NOTION_CONFIG"`
+	ConfigPath   string `name:"config" default:"~/.nocli.json" help:"Path to config file" env:"NOTION_CONFIG"`
 	BaseURL      string `name:"base-url" default:"https://www.notion.so" help:"Notion base URL" env:"NOTION_BASE_URL"`
 	TokenV2      string `name:"token-v2" help:"Notion token_v2 cookie value" env:"NOTION_TOKEN_V2"`
 	NotionUserID string `name:"notion-user-id" help:"notion_user_id cookie value" env:"NOTION_USER_ID"`
